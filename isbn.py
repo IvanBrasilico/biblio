@@ -85,12 +85,16 @@ def consulta_ISBN(update, context):
 
 def consulta_Livro(update, context):
     try:
-        text = update.message.text.strip() + '%'
+        args = update.message.text.split()[1:]
+        text = ' '.join([arg.strip() for arg in args]) + '%'
         print(text)
-        rows = session.query(Livro).filter(
-            or_(Livro.RowKey.like(text), Livro.Title.like(text))
+        livros = session.query(Livro).filter(
+            or_(Livro.RowKey.like(text), Livro.Title.like('%' + text))
         ).limit(10).all()
-        reply_text = '\n'.join(list(rows))
+        if len(livros) == 0:
+            reply_text = '%s Não encontrado' % text
+        else:
+            reply_text = '\n'.join([livro.Title for livro in livros])
     except Exception as err:
         reply_text = 'ERRO:' + str(err)
         logger.error(err, exc_info=True)
