@@ -1,6 +1,7 @@
 import csv
 import sys
 
+from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import Column, VARCHAR, create_engine, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
@@ -8,6 +9,8 @@ from sqlalchemy.orm import Session
 engine = create_engine('sqlite:///biblio.db')
 session = Session(engine)
 Base = declarative_base()
+
+
 
 
 class Livro(Base):
@@ -20,6 +23,10 @@ class Livro(Base):
     Authors = Column(VARCHAR(200))
     estante = Column(VARCHAR(10))
 
+
+class LivroView(ModelView):
+    column_searchable_list = ['RowKey', 'Title']
+    column_filters = ['Subject', 'estante']
 
 if __name__ == '__main__':
     sys.exit(0)
