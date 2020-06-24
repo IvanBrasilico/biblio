@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 
 from flask_admin.contrib.sqla import ModelView
@@ -8,7 +9,7 @@ from sqlalchemy.orm import Session
 
 sys.path.append('.')
 
-from mysql import SQL_URI
+SQL_URI = os.environ.get('SQL_URI')
 
 if not SQL_URI:
     SQL_URI = 'sqlite:///biblio.db'
