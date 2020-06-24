@@ -6,11 +6,17 @@ from sqlalchemy import Column, VARCHAR, create_engine, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
-engine = create_engine('sqlite:///biblio.db')
+sys.path.append('.')
+
+from mysql import SQL_URI
+
+if not SQL_URI:
+    SQL_URI = 'sqlite:///biblio.db'
+
+engine = create_engine(SQL_URI)
+
 session = Session(engine)
 Base = declarative_base()
-
-
 
 
 class Livro(Base):
@@ -28,8 +34,9 @@ class LivroView(ModelView):
     column_searchable_list = ['RowKey', 'Title']
     column_filters = ['Subject', 'estante']
 
+
 if __name__ == '__main__':
-    sys.exit(0)
+    # sys.exit(0)
     Base.metadata.create_all(engine)
     with open('livros.csv') as csv_in:
         reader = csv.DictReader(csv_in)

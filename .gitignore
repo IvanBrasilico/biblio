@@ -1,3 +1,4 @@
 # Project exclude paths
 /biblio-venv/
 bot_token.py
+mysql.py
