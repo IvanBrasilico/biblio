@@ -18,5 +18,10 @@ app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 admin = Admin(app, name='biblio', template_mode='bootstrap3')
 admin.add_view(LivroView(Livro, session))
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    session.remove()
+    app.logger.info('db_session remove')
+
 if __name__ == '__main__':
     app.run(threaded=False, debug=True)
