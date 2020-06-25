@@ -5,19 +5,24 @@ import sys
 from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import Column, VARCHAR, create_engine, Integer
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker, scoped_session
 
 sys.path.append('.')
 
 SQL_URI = os.environ.get('SQL_URI')
 
-if not SQL_URI:
+if  SQL_URI:
+    engine = create_engine(SQL_URI, pool_recycle=600)
+    session = scoped_session(sessionmaker(autocommit=False,
+                                             autoflush=False,
+                                             bind=engine))
+    Base = declarative_base()
+    Base.query = session.query_property()
+else:
     SQL_URI = 'sqlite:///biblio.db'
-
-engine = create_engine(SQL_URI)
-
-session = Session(engine)
-Base = declarative_base()
+    engine = create_engine(SQL_URI)
+    session = Session(engine)
+    Base = declarative_base()
 
 
 class Livro(Base):

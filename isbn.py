@@ -78,7 +78,10 @@ def consulta_ISBN(update, context):
         livro_json_fields['Authors'] = ','.join(livro_json_fields['Authors'])
         livro = Livro(**livro_json_fields)
         session.add(livro)
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
         reply_text = livro_json['RowKey'] + ' - ' + livro_json['Title']
     except Exception as err:
         reply_text = 'ERRO:' + str(err)
