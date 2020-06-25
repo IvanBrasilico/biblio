@@ -11,11 +11,11 @@ sys.path.append('.')
 
 SQL_URI = os.environ.get('SQL_URI')
 
-if  SQL_URI:
+if SQL_URI:
     engine = create_engine(SQL_URI, pool_recycle=600)
     session = scoped_session(sessionmaker(autocommit=False,
-                                             autoflush=False,
-                                             bind=engine))
+                                          autoflush=False,
+                                          bind=engine))
     Base = declarative_base()
     Base.query = session.query_property()
 else:

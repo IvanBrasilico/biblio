@@ -12,10 +12,9 @@ sys.path.append('.')
 
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
-
 from biblio.utils import error, logger
 
-BOTTOKEN=os.environ['BOTTOKEN']
+BOTTOKEN = os.environ['BOTTOKEN']
 
 updater = Updater(token=BOTTOKEN, use_context=True)
 dispatcher = updater.dispatcher
@@ -80,9 +79,10 @@ def consulta_ISBN(update, context):
         session.add(livro)
         try:
             session.commit()
-        except:
+            reply_text = livro_json['RowKey'] + ' - ' + livro_json['Title']
+        except Exception as err:
+            reply_text = 'Erro no mysql: %s' % str(err)
             session.rollback()
-        reply_text = livro_json['RowKey'] + ' - ' + livro_json['Title']
     except Exception as err:
         reply_text = 'ERRO:' + str(err)
         logger.error(err, exc_info=True)
@@ -94,9 +94,13 @@ def consulta_Livro(update, context):
         args = update.message.text.split()[1:]
         text = ' '.join([arg.strip() for arg in args]) + '%'
         print(text)
-        livros = session.query(Livro).filter(
-            or_(Livro.RowKey.like(text), Livro.Title.like('%' + text))
-        ).limit(10).all()
+        try:
+            livros = session.query(Livro).filter(
+                or_(Livro.RowKey.like(text), Livro.Title.like('%' + text))
+            ).limit(10).all()
+        except:
+            livros = []
+            session.rollback()
         if len(livros) == 0:
             reply_text = '%s Não encontrado' % text
         else:
