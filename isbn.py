@@ -1,5 +1,6 @@
 """Recebe um código ISBN e consulta na base ISBN."""
 import csv
+import os
 import sys
 
 import requests
@@ -11,8 +12,10 @@ sys.path.append('.')
 
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
-from bot_token import BOTTOKEN
+
 from biblio.utils import error, logger
+
+BOTTOKEN=os.environ['BOTTOKEN']
 
 updater = Updater(token=BOTTOKEN, use_context=True)
 dispatcher = updater.dispatcher
