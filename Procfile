@@ -1,2 +1,2 @@
 web: gunicorn wsgi:app
-web: python3 isbn.py
+worker: python3 isbn.py
