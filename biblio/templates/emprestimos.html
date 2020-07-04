@@ -1,0 +1,20 @@
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de biblioteca dos Brasílico</title>
+</head>
+<body>
+<h1>Sistema de biblioteca dos Brasílico</h1>
+<a href="/admin"> Administrar Biblioteca</a>
+<h4>Empréstimos atuais</h4>
+<table border="1">
+    {% for emprestimo in emprestimos %}
+    <tr>
+        <td>{{ emprestimo.get_data }}</td>
+        <td>{{ emprestimo.get_pessoa }}</td>
+        <td>{{ emprestimo.get_livro }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
