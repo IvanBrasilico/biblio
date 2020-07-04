@@ -3,6 +3,7 @@ import sys
 from flask import Flask, render_template
 from flask_admin import Admin, BaseView, expose
 from flask_babelex import Babel
+from flask_basicauth import BasicAuth
 
 sys.path.append('.')
 from biblio.models import Livro, session, LivroView, Emprestimo, Pessoa, PessoaView, EmprestimoView
@@ -18,11 +19,14 @@ babel = Babel(app)
 def get_locale():
     return 'pt'
 
-
-# set optional bootswatch theme
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+app.config['BASIC_AUTH_USERNAME'] = 'neo'
+app.config['BASIC_AUTH_PASSWORD'] = 'red'
+app.config['BASIC_AUTH_FORCE'] = True
+basic_auth = BasicAuth(app)
 
-# Flask and Flask-SQLAlchemy initialization here
+
+
 admin = Admin(app, name='biblio', template_mode='bootstrap3')
 admin.add_view(LivroView(Livro, session))
 admin.add_view(PessoaView(Pessoa, session))
